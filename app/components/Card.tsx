@@ -38,7 +38,7 @@ type CardProps = {
   longitude: string;
 };
 
-export const Card: React.FC<CardProps> = ({ name, regionName, city, stars, address, pricePerNight, originalPricePerNight, imageUrl, mealType, discount, hasRefundableOptions, latitude, longitude }) => {
+const Card: React.FC<CardProps> = ({ name, regionName, city, stars, address, pricePerNight, originalPricePerNight, imageUrl, mealType, discount, hasRefundableOptions, latitude, longitude }) => {
 
   const handleMapClick = () => {
     const url = `https://www.google.com/maps?q=${name}`;
@@ -83,3 +83,5 @@ export const Card: React.FC<CardProps> = ({ name, regionName, city, stars, addre
     </div>
   );
 };
+
+export default Card;

@@ -2,32 +2,29 @@
 
 import React, { useState, useEffect } from 'react';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
-import { Card } from './components/Comp';
+import Card from './components/Card';
+import SortButton from './components/SortButton';
 
 const Home: React.FC = () => {
   const [hotels, setHotels] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [clickedIndex, setClickedIndex] = useState<number>(0);
 
   useEffect(() => {
-    // Usamos fetch para hacer la solicitud a la API
     fetch('https://api-dev.outletdehoteles.com/api/availability/public')
       .then((response) => {
-        // Verificamos si la respuesta fue exitosa
         if (!response.ok) {
           throw new Error('Error al cargar los datos');
         }
         return response.json();
       })
       .then((data) => {
-        // Verificamos si la respuesta es exitosa según el campo 'success'
         if (data.success) {
-          // Mapear los datos de los hoteles
           const hotelsData = data.data.map((hotel: any) => {
-            // Combinamos las direcciones si existen
             const fullAddress = [hotel.address.address1, hotel.address.address2, hotel.address.address3]
-              .filter(Boolean)  // Filtramos las direcciones vacías
-              .join(", ");  // Unimos las direcciones con coma
+              .filter(Boolean)
+              .join(", ");
 
             return {
               id: hotel.id,
@@ -35,7 +32,7 @@ const Home: React.FC = () => {
               regionName: hotel.regionName,
               city: hotel.address.city,
               stars: hotel.stars,
-              address: fullAddress,  // Usamos la dirección combinada
+              address: fullAddress,
               pricePerNight: parseFloat(hotel.pricePerNight.toFixed(2)),
               originalPricePerNight: parseFloat(hotel.originalPricePerNight.toFixed(2)),
               imageUrl: hotel.photos,
@@ -52,22 +49,37 @@ const Home: React.FC = () => {
         }
       })
       .catch((err) => {
-        // Manejamos el error
         setError(err.message);
       })
       .finally(() => {
-        // Indicamos que la solicitud ha terminado
         setLoading(false);
       });
   }, []);
 
+  const sortedHotels = [...hotels].sort((a, b) => {
+    switch (clickedIndex) {
+      case 0:
+        return a.pricePerNight - b.pricePerNight;
+      case 1:
+        return b.pricePerNight - a.pricePerNight;
+      case 2:
+        return a.stars - b.stars;
+      case 3:
+        return b.stars - a.stars;
+      default:
+        return 0;
+    }
+  });
+
   if (loading) {
-    return  <DotLottieReact
-              className="w-3/4 h-auto m-auto"
-              src="https://lottie.host/22a00728-31ff-40e1-a8df-8bb8fb105702/pMwD2aBWQn.lottie"
-              loop
-              autoplay
-            />
+    return (
+      <DotLottieReact
+        className="w-3/4 h-auto m-auto"
+        src="https://lottie.host/22a00728-31ff-40e1-a8df-8bb8fb105702/pMwD2aBWQn.lottie"
+        loop
+        autoplay
+      />
+    );
   }
 
   if (error) {
@@ -76,7 +88,7 @@ const Home: React.FC = () => {
 
   return (
     <div className="flex flex-col flex-wrap justify-around font-montserrat">
-      {hotels.map((hotel) => (
+      {sortedHotels.map((hotel) => (
         <Card
           key={hotel.id}
           id={hotel.id}
@@ -95,6 +107,7 @@ const Home: React.FC = () => {
           longitude={hotel.longitude}
         />
       ))}
+      <SortButton setClickedIndex={setClickedIndex} />
     </div>
   );
 };
