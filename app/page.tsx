@@ -12,7 +12,7 @@ const Home: React.FC = () => {
   const [clickedIndex, setClickedIndex] = useState<number>(0);
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}`)
+    fetch('https://api-dev.outletdehoteles.com/api/availability/public')
       .then((response) => {
         if (!response.ok) {
           throw new Error('Error al cargar los datos');
