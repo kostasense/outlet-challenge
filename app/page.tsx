@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import Card from './components/Card';
 import SortButton from './components/SortButton';
+import axios from 'axios';
 
 const Home: React.FC = () => {
   const [hotels, setHotels] = useState<any[]>([]);
@@ -12,16 +13,10 @@ const Home: React.FC = () => {
   const [clickedIndex, setClickedIndex] = useState<number>(0);
 
   useEffect(() => {
-    fetch('https://api-dev.outletdehoteles.com/api/availability/public')
+    axios.get('https://api-dev.outletdehoteles.com/api/availability/public')
       .then((response) => {
-        if (!response.ok) {
-          throw new Error('Error al cargar los datos');
-        }
-        return response.json();
-      })
-      .then((data) => {
-        if (data.success) {
-          const hotelsData = data.data.map((hotel: any) => {
+        if (response.data.success) {
+          const hotelsData = response.data.data.map((hotel: any) => {
             const fullAddress = [hotel.address.address1, hotel.address.address2, hotel.address.address3]
               .filter(Boolean)
               .join(", ");
