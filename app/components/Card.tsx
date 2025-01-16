@@ -34,11 +34,9 @@ type CardProps = {
   mealType: string;
   discount: number;
   hasRefundableOptions: boolean;
-  latitude: string;
-  longitude: string;
 };
 
-const Card: React.FC<CardProps> = ({ name, regionName, city, stars, address, pricePerNight, originalPricePerNight, imageUrl, mealType, discount, hasRefundableOptions, latitude, longitude }) => {
+const Card: React.FC<CardProps> = ({ name, regionName, city, stars, address, pricePerNight, originalPricePerNight, imageUrl, mealType, discount, hasRefundableOptions }) => {
 
   const handleMapClick = () => {
     const url = `https://www.google.com/maps?q=${name}`;

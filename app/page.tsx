@@ -38,9 +38,7 @@ const Home: React.FC = () => {
               imageUrl: hotel.photos,
               mealType: typeof hotel.mealType === 'object' && hotel.mealType.text ? hotel.mealType.text : hotel.mealType,
               discount: hotel.discounts[0],
-              hasRefundableOptions: hotel.hasRefundableOptions,
-              latitude: hotel.location.latitude,
-              longitude: hotel.location.longitude
+              hasRefundableOptions: hotel.hasRefundableOptions
             };
           });
           setHotels(hotelsData);
@@ -103,8 +101,6 @@ const Home: React.FC = () => {
           mealType={hotel.mealType}
           discount={hotel.discount}
           hasRefundableOptions={hotel.hasRefundableOptions}
-          latitude={hotel.latitude}
-          longitude={hotel.longitude}
         />
       ))}
       <SortButton setClickedIndex={setClickedIndex} />
